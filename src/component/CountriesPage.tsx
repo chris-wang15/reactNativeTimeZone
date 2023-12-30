@@ -4,20 +4,27 @@ import {Button, StyleSheet, Text, View} from "react-native";
 import {StatusBar} from "expo-status-bar";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../state/store";
-import {follow} from "../state/CountryFollowState";
+import {asyncRefresh, follow} from "../state/CountryFollowState";
+import {useEffect} from "react";
 
 type CountriesPageProps = NativeStackScreenProps<PageParamList, 'CountriesPage'>
 export const countriesPageName = 'CountriesPage'
 export default function CountriesPage({route, navigation}: CountriesPageProps) {
-    const followedCountrySet: Set<string> = useSelector(
+    const followedCountrySet: string[] = useSelector(
         (state: RootState) => state.follow.value
     )
     const dispatch = useDispatch<AppDispatch>()
+
+    useEffect(() => {
+        dispatch(asyncRefresh())
+    }, [])
+
+    let mockNumber = 0
     return (
         <View style={styles.container}>
             <StatusBar style="auto"/>
-            <Text>Open up App.tsx to start working on your app!</Text>
-            <Button title={'Test'} onPress={() => dispatch(follow("actionName"))}/>
+            <Text>{`followedCountrySet size: ${followedCountrySet.length}`}</Text>
+            <Button title={'Test'} onPress={() => dispatch(follow(`${123}`))}/>
         </View>
     )
 }
