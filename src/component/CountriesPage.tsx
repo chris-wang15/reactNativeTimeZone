@@ -19,7 +19,6 @@ export default function CountriesPage({route, navigation}: CountriesPageProps) {
         dispatch(asyncRefresh())
     }, [])
 
-    let mockNumber = 0
     return (
         <View style={styles.container}>
             <StatusBar style="auto"/>
