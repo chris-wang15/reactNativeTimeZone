@@ -1,6 +1,6 @@
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {PageParamList} from "../../App";
-import {Button, FlatList, Image, Pressable, StyleSheet, Text, View} from "react-native";
+import {FlatList, Image, Pressable, StyleSheet, Text, View} from "react-native";
 import {StatusBar} from "expo-status-bar";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "../state/store";
@@ -8,7 +8,7 @@ import {asyncRefresh, unfollow} from "../state/CountryFollowState";
 import {useEffect, useState} from "react";
 import {SafeAreaView} from "react-native-safe-area-context";
 import {t_current_time, t_followed_zones} from "../res/values/strings";
-import {c_black, c_gray, c_white} from "../res/values/colors"
+import {c_black, c_white} from "../res/values/colors"
 import {DateInfo, getTimeByZoneName} from "../utils/DateUtils";
 import {countriesPageName} from "./CountriesPage";
 
@@ -16,7 +16,7 @@ type FollowingPageProps = NativeStackScreenProps<PageParamList, 'FollowingPage'>
 
 export const followingPageName = 'FollowingPage'
 
-export default function FollowingPage({route, navigation}: FollowingPageProps) {
+export default function FollowingPage({navigation}: FollowingPageProps) {
     const followedItems: string[] = useSelector(
         (state: RootState) => state.follow.value
     )
@@ -25,9 +25,6 @@ export default function FollowingPage({route, navigation}: FollowingPageProps) {
     useEffect(() => {
         dispatch(asyncRefresh())
     }, [])
-
-    // TODO @liwei mock test
-    const followedItemsMock = ['Africa/Accra', 'Europe/Amsterdam']
     return (
         <View style={styles.fullScreenBg}>
             <StatusBar style="light" backgroundColor={c_black}/>
@@ -35,9 +32,10 @@ export default function FollowingPage({route, navigation}: FollowingPageProps) {
                 <Text style={styles.fgTitle}>{t_followed_zones}</Text>
                 <View style={styles.listContainer}>
                     <FlatList
-                        data={followedItemsMock}
+                        data={followedItems}
                         renderItem={
                             ({item}) => <TimeZoneItem
+                                key={item}
                                 country={item}
                                 onUnfollow={() => dispatch(unfollow(item))}/>
                         }/>
