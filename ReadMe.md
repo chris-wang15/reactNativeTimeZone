@@ -6,3 +6,6 @@ Typescript + Redux + Expo
 
 ## Screen Shots
 
+![following-page](https://github.com/chris-wang15/reactNativeTimeZone/assets/128122102/6b1fbecf-ffb9-4904-acb4-7f169942cf7c)
+
+![countryPage](https://github.com/chris-wang15/reactNativeTimeZone/assets/128122102/2fee1b96-e34f-4006-b00e-901aa009dec7)
