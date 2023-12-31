@@ -7,10 +7,11 @@ import {AppDispatch, RootState} from "../state/store";
 import {asyncRefresh, unfollow} from "../state/CountryFollowState";
 import {useEffect, useState} from "react";
 import {SafeAreaView} from "react-native-safe-area-context";
-import {t_current_time, t_followed_zones} from "../res/values/strings";
+import {t_current_time, t_delete, t_followed_zones} from "../res/values/strings";
 import {c_black, c_white} from "../res/values/colors"
 import {DateInfo, getTimeByZoneName} from "../utils/DateUtils";
 import {countriesPageName} from "./CountriesPage";
+import {Swipeable} from "react-native-gesture-handler";
 
 type FollowingPageProps = NativeStackScreenProps<PageParamList, 'FollowingPage'>
 
@@ -50,7 +51,6 @@ export default function FollowingPage({navigation}: FollowingPageProps) {
     )
 }
 
-// TODO @liwei unfollow function
 function TimeZoneItem(
     props: { country: string, onUnfollow: () => void }
 ) {
@@ -59,7 +59,7 @@ function TimeZoneItem(
             time: '',
             date: ''
         }
-    );
+    )
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -68,17 +68,29 @@ function TimeZoneItem(
             )
 
         }, 1000)
-        return () => clearInterval(intervalId);
+        return () => clearInterval(intervalId)
     }, [])
+
+    const renderRightActions = () => (
+        <Pressable onPress={props.onUnfollow}>
+            <View style={styles.rightActionContainer}>
+                <Text style={styles.rightActionText}>{t_delete}</Text>
+            </View>
+        </Pressable>
+    )
 
     return (
         <View style={styles.timeZoneContainer}>
-            <View style={styles.zoneHeader}>
-                <Text style={styles.zoneCountry}>{props.country}</Text>
-                <Text style={styles.zoneCurrentTime}>{t_current_time}</Text>
-            </View>
-            <Text style={styles.zoneTimeDetail}>{currentTime.time}</Text>
-            <Text style={styles.zoneDateDetail}>{currentTime.date}</Text>
+            <Swipeable
+                overshootRight={false}
+                renderRightActions={renderRightActions}>
+                <View style={styles.zoneHeader}>
+                    <Text style={styles.zoneCountry}>{props.country}</Text>
+                    <Text style={styles.zoneCurrentTime}>{t_current_time}</Text>
+                </View>
+                <Text style={styles.zoneTimeDetail}>{currentTime.time}</Text>
+                <Text style={styles.zoneDateDetail}>{currentTime.date}</Text>
+            </Swipeable>
         </View>
     )
 }
@@ -157,5 +169,18 @@ const styles = StyleSheet.create({
     navigationImg: {
         width: '100%',
         height: '100%',
+    },
+    rightActionContainer: {
+        backgroundColor: 'red',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 16
+    },
+    rightActionText: {
+        color: c_white,
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        fontSize: 16,
     }
-});
+})
